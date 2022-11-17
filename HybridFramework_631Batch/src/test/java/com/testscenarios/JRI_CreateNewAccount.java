@@ -23,7 +23,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.annotations.AfterClass;
 
-public class FB_login {
+public class JRI_CreateNewAccount {
 	WebDriver driver;
 	Locators loc = new Locators();
 
@@ -36,11 +36,7 @@ public class FB_login {
 
 	@Test
 	public void f() throws Exception {
-		driver.get("https://www.facebook.com/");
-		driver.findElement(loc.FBLogin_Email_EditBox).sendKeys("h2otestingtools123@gmail.com");
-		driver.findElement(loc.FBLogin_Password_EditBox).sendKeys("Testing@123");
-		driver.findElement(loc.FBLogin_Login_Button).click();
-		Thread.sleep(5000);
+		//Develop the test code
 	}
 
 	@AfterMethod
