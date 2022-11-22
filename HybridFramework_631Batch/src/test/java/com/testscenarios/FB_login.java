@@ -3,6 +3,7 @@ package com.testscenarios;
 import org.testng.annotations.Test;
 
 import com.objectrepositories.Locators;
+import com.utilities.CommonFunctions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -23,15 +24,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.annotations.AfterClass;
 
-public class FB_login {
-	WebDriver driver;
+public class FB_login extends CommonFunctions {
+	
 	Locators loc = new Locators();
 
 	@BeforeClass
 	public void beforeClass() {
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
+		chromeBrowserLaunch();
 	}
 
 	@Test
@@ -45,11 +44,7 @@ public class FB_login {
 
 	@AfterMethod
 	public void afterMethod() throws Exception {
-		Date d = new Date();
-		DateFormat abcd = new SimpleDateFormat("ddMMMyyyy_HHmmss");
-		String timeStamp = abcd.format(d);
-		File abc = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		FileHandler.copy(abc, new File(".\\screenshots\\QA" + timeStamp + ".png"));
+		screenshot();
 	}
 
 	@AfterClass
