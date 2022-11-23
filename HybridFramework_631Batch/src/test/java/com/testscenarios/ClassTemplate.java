@@ -4,7 +4,6 @@ import org.testng.annotations.Test;
 
 import com.objectrepositories.Locators;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -29,7 +28,7 @@ public class ClassTemplate {
 
 	@BeforeClass
 	public void beforeClass() {
-		WebDriverManager.chromedriver().setup();
+		
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 	}

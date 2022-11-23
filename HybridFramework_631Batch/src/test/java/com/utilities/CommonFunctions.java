@@ -11,19 +11,38 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.io.FileHandler;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class CommonFunctions {
-//QA will create re-usable methods(Functions)
+//QA will create re-usable methods(Functions)/ variables 
 
 	public WebDriver driver;
 
 	public void chromeBrowserLaunch() {
-		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
+	}
+
+	@Parameters("browserName")
+	@BeforeClass // Pre-condition
+	public void beforeClass(@Optional("edge") String browserName) {
+		if (browserName.equalsIgnoreCase("Edge")) {
+			driver = new EdgeDriver();
+		} else if (browserName.equalsIgnoreCase("Firefox")) {
+			driver = new FirefoxDriver();
+		} else if (browserName.equalsIgnoreCase("chrome")) {
+			driver = new ChromeDriver();
+			driver.manage().window().maximize();
+		} else {
+			System.out.println("Please give browser name chrome/edge/firefox only......");
+		}
+
 	}
 
 	public void screenshot() throws Exception {
@@ -50,6 +69,7 @@ public class CommonFunctions {
 			System.out.println("Given locator is not displayed on DOM(Current page***");
 		}
 	}
+
 	public void clickByAnyLocator(By locator) {
 		// Check your locator is displayed?
 		if (driver.findElement(locator).isDisplayed()) {
@@ -64,7 +84,5 @@ public class CommonFunctions {
 			System.out.println("Given locator is not displayed on DOM(Current page***");
 		}
 	}
-	
-	
 
 }

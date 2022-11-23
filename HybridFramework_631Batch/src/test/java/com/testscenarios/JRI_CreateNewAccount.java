@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 import com.objectrepositories.Locators;
 import com.utilities.CommonFunctions;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
