@@ -22,31 +22,30 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.annotations.AfterClass;
 
-public class ClassTemplate extends CommonFunctions {
-
+public class Print_TTD_CountryDropdown_OptionValues extends CommonFunctions {
 	Locators loc = new Locators();
 
 	@BeforeClass
 	public void beforeClass() {
-
 		chromeBrowserLaunch();
-
 	}
 
 	@Test
 	public void f() throws Exception {
-		// Develop the test code
-		driver.get("URL of the Page");
+		driver.get("https://tirupatibalaji.ap.gov.in/#/registration");
 		Thread.sleep(5000);
+		//Print all Country options
+		//printAllDropdownValues(By.name("countryS"));
+		
+		selectCustomiseOptionFromTheDropdownValues(By.name("countryS"), "Australia");
 		
 	}
 
 	@AfterMethod
 	public void afterMethod() throws Exception {
-		screenshot();
 	}
 
-	@AfterClass
+	//@AfterClass
 	public void afterClass() {
 		driver.quit();
 	}

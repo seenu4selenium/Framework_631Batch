@@ -33,7 +33,7 @@ public class FB_login extends CommonFunctions {
 
 	@Parameters("browserName")
 	@BeforeClass // Pre-condition
-	public void beforeClass(@Optional("edge") String browserName) {
+	public void beforeClass(@Optional("chrome") String browserName) {
 		if (browserName.equalsIgnoreCase("Edge")) {
 			driver = new EdgeDriver();
 		} else if (browserName.equalsIgnoreCase("Firefox")) {
@@ -61,7 +61,7 @@ public class FB_login extends CommonFunctions {
 		screenshot();
 	}
 
-	@AfterClass
+	//@AfterClass
 	public void afterClass() {
 		driver.quit();
 	}
