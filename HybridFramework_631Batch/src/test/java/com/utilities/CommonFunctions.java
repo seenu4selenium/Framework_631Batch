@@ -292,7 +292,7 @@ public class CommonFunctions {
 		Set<String> allWindowNames = driver.getWindowHandles();// 4
 		System.out.println("allWindowNames:" + allWindowNames);
 
-		// Close the child window (popups)
+		// Close the child window (popup's)
 		// for (int i = 0; i < array.length; i++) { }
 		for (String string : allWindowNames) {
 			// validate the window name is parent window /Child window?
