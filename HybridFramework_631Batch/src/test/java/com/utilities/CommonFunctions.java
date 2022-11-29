@@ -12,13 +12,16 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -31,7 +34,11 @@ public class CommonFunctions {
 //QA will create re-usable methods(Functions)/ variables 
 
 	public WebDriver driver;
-
+	public Actions actions;
+	public JavascriptExecutor js;
+	
+	
+	
 	public void chromeBrowserLaunch() {
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -92,7 +99,9 @@ public class CommonFunctions {
 		// element);
 	}
 
-	/****************** Dropdown selection Methods**************************************/
+	/******************
+	 * Dropdown selection Methods
+	 **************************************/
 
 	public void selectByVisibleText(By locater, String visibleText) {
 
@@ -141,7 +150,7 @@ public class CommonFunctions {
 		}
 
 	}
-	
+
 	public void printAllDropdownValues(By locater) {
 		WebElement element = driver.findElement(locater);
 
@@ -163,7 +172,7 @@ public class CommonFunctions {
 		}
 
 	}
-	
+
 	public void selectCustomiseOptionFromTheDropdownValues(By locater, String visibleText) {
 		WebElement element = driver.findElement(locater);
 		if (element.isDisplayed()) {
@@ -193,7 +202,6 @@ public class CommonFunctions {
 		}
 
 	}
-	
 
 	/************ webdriver waits ***********************/
 	// explicit wait
@@ -228,19 +236,19 @@ public class CommonFunctions {
 			i++;
 		}
 	}
-	
+
 	/*********** SwithchToWindow using Tab ***************************/
 	public void switchToNewTab() {
 		// Get the current window handle
 		String windowHandle = driver.getWindowHandle();// abc
 
-	ArrayList<String> allTabs = new ArrayList<String>(driver.getWindowHandles());
+		ArrayList<String> allTabs = new ArrayList<String>(driver.getWindowHandles());
 		driver.switchTo().window(allTabs.get(1));
 
 		// Switch back to original window
 		// driver.switchTo().window(windowHandle);
 	}
-	
+
 	/***********
 	 * SwithchToWindow using Tab then close the New Tab againg back to Parent Window
 	 ***************************/
@@ -254,7 +262,6 @@ public class CommonFunctions {
 		// Switch back to original window
 		driver.switchTo().window(parentWindow);
 	}
-	
 
 	/************
 	 * popupHandle
@@ -305,5 +312,86 @@ public class CommonFunctions {
 
 	}
 
-	
+	/************************* Actions ************/
+
+	public void moveToOnElement(By locator) {
+		actions = new Actions(driver);
+		try {
+			WebElement element = driver.findElement(locator);
+			actions.moveToElement(element).perform();
+		} catch (Exception e) {
+			System.out.println("Error in description: " + e.getStackTrace());
+		}
+	}
+
+	public void mouseHoverClickandHold(By locator) {
+		actions = new Actions(driver);
+		try {
+			WebElement element = driver.findElement(locator);
+			actions.clickAndHold(element).build().perform();
+		} catch (Exception e) {
+			System.out.println("Error in description: " + e.getStackTrace());
+		}
+
+	}
+
+	public void mouseHoverContextClick(By locator) {
+		actions = new Actions(driver);
+		try {
+			WebElement element = driver.findElement(locator);
+			actions.contextClick(element).build().perform();
+
+		} catch (Exception e) {
+			System.out.println("Error in description: " + e.getStackTrace());
+		}
+
+	}
+
+	public void doubleClick(By locator) {
+		actions = new Actions(driver);
+		try {
+			WebElement element = driver.findElement(locator);
+			actions.doubleClick(element).build().perform();
+		} catch (Exception e) {
+			System.out.println("Error in description: " + e.getStackTrace());
+		}
+
+	}
+
+	public void dragandDrop(By sourceelementLocator, By destinationelementLocator) {
+		actions = new Actions(driver);
+		try {
+			WebElement sourceElement = driver.findElement(sourceelementLocator);
+			WebElement destinationElement = driver.findElement(destinationelementLocator);
+
+			if (sourceElement.isDisplayed() && destinationElement.isDisplayed()) {
+				actions.dragAndDrop(sourceElement, destinationElement).build().perform();
+			} else {
+				System.out.println("Element(s) was not displayed to drag / drop");
+			}
+		} catch (StaleElementReferenceException e) {
+			System.out.println("Element with " + sourceelementLocator + "or" + destinationelementLocator
+					+ "is not attached to the page document " + e.getStackTrace());
+		} catch (NoSuchElementException e) {
+			System.out.println("Element " + sourceelementLocator + "or" + destinationelementLocator
+					+ " was not found in DOM " + e.getStackTrace());
+		} catch (Exception e) {
+			System.out.println("Error occurred while performing drag and drop operation " + e.getStackTrace());
+		}
+	}
+
+	public void dragandDropUsingJavaScript(By sourceelementLocator, By destinationelementLocator) {
+		final String java_script = "var src=arguments[0],tgt=arguments[1];var dataTransfer={dropEffe"
+				+ "ct:'',effectAllowed:'all',files:[],items:{},types:[],setData:fun"
+				+ "ction(format,data){this.items[format]=data;this.types.append(for"
+				+ "mat);},getData:function(format){return this.items[format];},clea"
+				+ "rData:function(format){}};var emit=function(event,target){var ev"
+				+ "t=document.createEvent('Event');evt.initEvent(event,true,false);"
+				+ "evt.dataTransfer=dataTransfer;target.dispatchEvent(evt);};emit('"
+				+ "dragstart',src);emit('dragenter',tgt);emit('dragover',tgt);emit("
+				+ "'drop',tgt);emit('dragend',src);";
+
+		js.executeScript(java_script, sourceelementLocator, destinationelementLocator);
+	}
+
 }
