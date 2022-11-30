@@ -26,6 +26,7 @@ import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -36,9 +37,7 @@ public class CommonFunctions {
 	public WebDriver driver;
 	public Actions actions;
 	public JavascriptExecutor js;
-	
-	
-	
+
 	public void chromeBrowserLaunch() {
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -392,6 +391,73 @@ public class CommonFunctions {
 				+ "'drop',tgt);emit('dragend',src);";
 
 		js.executeScript(java_script, sourceelementLocator, destinationelementLocator);
+	}
+
+	/******************** Frames Handling *******************/
+
+	public int iframeCount() {
+		driver.switchTo().defaultContent();
+		// js = ((JavascriptExecutor) driver);
+		int numberOfFrames = Integer
+				.parseInt(((JavascriptExecutor) driver).executeScript("return window.length").toString());
+		System.out.println("Number of iframes on the page are: " + numberOfFrames);
+		return numberOfFrames;
+	}
+
+	public void switchToFrameByInt(int i) {
+		driver.switchTo().defaultContent();
+		driver.switchTo().frame(i);
+	}
+
+	public int loopAllFramesForElement(By locator) {
+
+		int elementpresenceCount = 0;
+		int loop = 0;
+		int maxFramecount = iframeCount();// 3
+		
+		// if given locater has present on webpage, then the element size would be '1' else '0'
+		elementpresenceCount = driver.findElements(locator).size();// 0
+		while (elementpresenceCount == 0 && loop < maxFramecount) {
+			try {
+				switchToFrameByInt(loop);
+				elementpresenceCount = driver.findElements(locator).size();// 1
+				System.out.println("Try LoopAllframesAndReturnWebEL : " + loop + "; ElementpresenceCount: "
+						+ elementpresenceCount);
+				if (elementpresenceCount > 0 || loop > maxFramecount) {
+					break;
+				}
+			} catch (Exception ex) {
+				System.out.println("Catch LoopAllframesAndReturnWebEL Old: " + loop + "; " + ex);
+			}
+			loop++;// 1
+		}
+		return elementpresenceCount;
+	}
+
+	// Gettext Method
+	public String gettextMethod(By locator) throws Exception {
+		String eleText = null;
+		WebElement ele = driver.findElement(locator);
+		highlightElement(ele);
+		eleText = ele.getText();
+		return eleText;
+	}
+
+	public String getAttributeByValue(By locator) throws Exception {
+		String eleText = null;
+		WebElement ele = driver.findElement(locator);
+		highlightElement(ele);
+		eleText = ele.getAttribute("value");
+		return eleText;
+
+	}
+
+	public void assertEquals(By actualLocator) throws Exception {
+		WebElement actualEle = driver.findElement(actualLocator);
+		highlightElement(actualEle);
+		String actualText = actualEle.getText();
+		String expectedText = "Data calculated on the client side.";
+		Assert.assertEquals(expectedText, actualText);
 	}
 
 }
