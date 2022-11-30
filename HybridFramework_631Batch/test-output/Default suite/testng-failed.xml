@@ -3,14 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.testscenarios.SwitchToTabAndClose">
+      <class name="com.testscenarios.FramesHandle">
         <methods>
-          <include name="afterMethod"/>
           <include name="f"/>
           <include name="beforeClass"/>
-          <include name="afterClass"/>
         </methods>
-      </class> <!-- com.testscenarios.SwitchToTabAndClose -->
+      </class> <!-- com.testscenarios.FramesHandle -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
